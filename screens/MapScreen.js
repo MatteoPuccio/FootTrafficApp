@@ -1,63 +1,79 @@
-import React, { useState } from "react";
-import { View, Text, Button, StyleSheet, Dimensions, PermissionsAndroid } from "react-native";
-import Geolocation from 'react-native-geolocation-service';
-import MapView, { Marker } from 'react-native-maps';
-import { IconButton } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { View, Text, Button, StyleSheet, Dimensions } from "react-native";
+import MapView, { Callout, Marker } from 'react-native-maps';
+import { ActivityIndicator, IconButton } from "react-native-paper";
 
 import GooglePlacesInput from "../map_components/GooglePlacesInput";
 import MarkerModel from "../model/MarkerModel";
+import {
+    getCurrentLocation,
+    location
+} from "../model/geolocation/GeolocationUtils"
+import MarkerPopup from "../map_components/MarkerPopup";
+
+
+
+navigator.geolocation = require('react-native-geolocation-service');
 
 export default function MapScreen() {
     const [latitudeDelta, longitudeDelta] = [0.000922, 0.00421];
-
-    const [showMap, setShowMap] = useState(false);
     const [coords, setCoords] = useState({
         latitude: 0.0,
         longitude: 0.0,
         latitudeDelta: latitudeDelta,
         longitudeDelta: longitudeDelta
     });
-    const [grantedPermission, setGrantedPermission] = useState(false);
+
+    const [userLocation, setUserLocation] = useState(location);
+
     const [selectedMarker, setSelectedMarker] = useState(new MarkerModel(null));
 
-    //get user permission to use location
-    const getLocationPermission = async () => {
-        if (grantedPermission) return true;
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    'title': 'Busy Place App',
-                    'message': 'Busy Place App access to your location '
-                }
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                setGrantedPermission(true);
-                return true;
-            } else {
-                setGrantedPermission(false);
-                return false;
-            }
-        } catch (err) {
-            console.warn(err)
+    const [showPopup, setShowPopup] = useState(false);
+    const [showMap, setShowMap] = useState(false);
+
+    useEffect(() => {
+        const _setUserLocation = async () => {
+            const _location = await getCurrentLocation();
+            console.log("Waiting for _location " + _location);
+            setUserLocation(_location);
         }
 
-    }
+        _setUserLocation();
+        console.log("UseEffect: " + JSON.stringify(userLocation));
+    }, []);
 
-
-    const displayMap = (data, location) => {
+    const displayMap = (_data, _location) => {
+        console.log(JSON.stringify(_data) + " " + JSON.stringify(_location));
         setCoords({
-            latitude: location.lat,
-            longitude: location.lng,
+            latitude: _location.lat,
+            longitude: _location.lng,
             latitudeDelta: latitudeDelta,
             longitudeDelta: longitudeDelta
         });
         console.log('Showing map...');
-        console.log(data);
-        setSelectedMarker(new MarkerModel(data));
+        console.log(_data);
+        _data.geometry = {
+            location: _location
+        };
+        setSelectedMarker(new MarkerModel(_data));
         setShowMap(true);
     }
 
+    const markerPress = () => {
+        setShowPopup(!showPopup);
+    }
+
+    if (userLocation == null) {
+        getCurrentLocation();
+        //console.log(location);
+        return (
+            <View style={{ justifyContent: "center", flex: 1 }}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
+
+    console.log(JSON.stringify(userLocation));
     return (
         <View style={styles.container}>
             {showMap ?
@@ -69,11 +85,7 @@ export default function MapScreen() {
                     key='mapView'
                     onMarkerPress={() => console.log('marker pressed')}
                 >
-                    <Marker
-                        title={selectedMarker.title}
-                        coordinate={selectedMarker.coordinate}
-                        description={selectedMarker.description}
-                    />
+                    <Marker coordinate={selectedMarker.coordinate} onPress={markerPress} />
                 </MapView>,
                 <View key='exitBttnView' style={styles.exitMapButtonContainer}>
                     <IconButton
@@ -83,10 +95,17 @@ export default function MapScreen() {
                         color='#2319e0'
                         onPress={() => { setShowMap(false) }}
                     />
-                </View>]
+                </View>,
+                <MarkerPopup
+                    key='markerPopup'
+                    title={selectedMarker.title}
+                    description={selectedMarker.description}
+                    show={showPopup}
+                />
+                ]
                 : <GooglePlacesInput
                     displayMap={displayMap}
-                    style={styles.searchBar}
+                    location={userLocation}
                 />
             }
         </View >
@@ -103,14 +122,11 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width
     },
-    searchBar: {
-
-    },
     exitMapButtonContainer: {
         position: 'absolute',
         alignSelf: 'flex-end'
     },
     exitMapButton: {
         //backgroundColor: '#cacbd5'
-    }
+    },
 });

@@ -1,5 +1,5 @@
 
-
+//Model of map marker, store location and description
 export default class MarkerModel {
 
     constructor(data) {
@@ -8,11 +8,12 @@ export default class MarkerModel {
             name: "Nessun luogo selezionato",
             types: "Seleziona un luogo con la barra di ricerca"
         } : data;
+
         this.coordinate = {
             latitude: data.geometry.location.lat,
             longitude: data.geometry.location.lng
-        }
-        this.title = data.name
-        this.description = JSON.stringify(data.types)
+        };
+        this.title = data.name != null ? data.name : data.description.split(',')[0];
+        this.description = JSON.stringify(data.types);
     }
 }

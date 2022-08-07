@@ -7,8 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import MapScreen from "../screens/MapScreen";
-import TopBar from './TopNavigation';
+import BookmarkScreen from '../screens/BookmarkScreen';
 
+import TopBar from './TopNavigation';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -48,7 +49,6 @@ export default function BottomNavigation() {
                         tabBarIcon: ({ focused, color }) => (
                             <TabIcon name="home" color={color} focused={focused} />
                         ),
-
                     }}
                 />
                 <Tab.Screen
@@ -58,6 +58,17 @@ export default function BottomNavigation() {
                         tabBarLabel: 'Map',
                         tabBarIcon: ({ focused, color }) => (
                             <TabIcon name="google-maps" color={color} focused={focused} />
+                        ),
+                    }}
+
+                />
+                <Tab.Screen
+                    name="bookmarks"
+                    component={BookmarkScreen}
+                    options={{
+                        tabBarLabel: 'Map',
+                        tabBarIcon: ({ focused, color }) => (
+                            <TabIcon name="bookmark" color={color} focused={focused} />
                         ),
                     }}
 
