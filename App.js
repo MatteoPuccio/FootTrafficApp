@@ -1,6 +1,5 @@
 import React from 'react';
-import { getCurrentLocation } from './model/geolocation/GeolocationUtils';
-import BottomNavigation from './navigation/BottomNavigation';
+import BottomNavigation from './src/navigation/BottomNavigation';
 
 function App() {
   return (

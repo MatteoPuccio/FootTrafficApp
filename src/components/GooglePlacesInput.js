@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
-import { location } from '../model/geolocation/GeolocationUtils';
+import { location } from '../utils/geolocation/GeolocationUtils';
 
 
 

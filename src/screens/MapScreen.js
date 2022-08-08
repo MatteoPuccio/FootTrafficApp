@@ -3,19 +3,19 @@ import { View, Text, Button, StyleSheet, Dimensions } from "react-native";
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { ActivityIndicator, IconButton } from "react-native-paper";
 
-import GooglePlacesInput from "../map_components/GooglePlacesInput";
+import GooglePlacesInput from "../components/GooglePlacesInput";
 import MarkerModel from "../model/MarkerModel";
 import {
     getCurrentLocation,
     location
-} from "../model/geolocation/GeolocationUtils"
-import MarkerPopup from "../map_components/MarkerPopup";
+} from "../utils/geolocation/GeolocationUtils"
+import MarkerPopup from "../components/MarkerPopup";
 
 
 
 navigator.geolocation = require('react-native-geolocation-service');
 
-export default function MapScreen() {
+export default function MapScreen(props) {
     const [latitudeDelta, longitudeDelta] = [0.000922, 0.00421];
     const [coords, setCoords] = useState({
         latitude: 0.0,
@@ -98,9 +98,9 @@ export default function MapScreen() {
                 </View>,
                 <MarkerPopup
                     key='markerPopup'
-                    title={selectedMarker.title}
-                    description={selectedMarker.description}
+                    marker={selectedMarker}
                     show={showPopup}
+                    bookmarkLocation={props.bookmarkLocation}
                 />
                 ]
                 : <GooglePlacesInput

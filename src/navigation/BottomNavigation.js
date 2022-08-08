@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,7 +9,6 @@ import SettingsScreen from "../screens/SettingsScreen";
 import MapScreen from "../screens/MapScreen";
 import BookmarkScreen from '../screens/BookmarkScreen';
 
-import TopBar from './TopNavigation';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -30,12 +29,19 @@ class TabIcon extends React.Component {
     }
 }
 
+
+
 export default function BottomNavigation() {
+
+    const [bookmarks, setBookmarks] = useState([]);
+
+    const bookmarkLocation = () => {
+
+    }
 
     return (
 
         <NavigationContainer>
-            <TopBar />
             <Tab.Navigator
                 initialRouteName="home"
                 barStyle={styles.barStyle}
@@ -44,6 +50,7 @@ export default function BottomNavigation() {
                 <Tab.Screen
                     name="home"
                     component={HomeScreen}
+
                     options={{
                         tabBarLabel: 'Home',
                         tabBarIcon: ({ focused, color }) => (
@@ -53,7 +60,8 @@ export default function BottomNavigation() {
                 />
                 <Tab.Screen
                     name="map"
-                    component={MapScreen}
+                    children={() => <MapScreen bookmarkLocation={bookmarkLocation} />}
+
                     options={{
                         tabBarLabel: 'Map',
                         tabBarIcon: ({ focused, color }) => (
@@ -64,7 +72,7 @@ export default function BottomNavigation() {
                 />
                 <Tab.Screen
                     name="bookmarks"
-                    component={BookmarkScreen}
+                    children={() => <BookmarkScreen bookmarks={bookmarks} />}
                     options={{
                         tabBarLabel: 'Map',
                         tabBarIcon: ({ focused, color }) => (

@@ -8,7 +8,7 @@ export default function MarkerPopup(props) {
 
     useEffect(() => {
         if (props.show) {
-            Animated.timing(calloutHeight, {
+            Animated.spring(calloutHeight, {
                 toValue: 150,
                 duration: 500,
                 useNativeDriver: false
@@ -16,24 +16,33 @@ export default function MarkerPopup(props) {
         } else {
             Animated.timing(calloutHeight, {
                 toValue: 0,
-                duration: 500,
+                duration: 300,
                 useNativeDriver: false
             }).start();
         }
     }, [props.show]);
 
+    const bookmarkLocation = () => {
+        props.bookmarkLocation();
+    }
+
     return (
         <Animated.View
             style={[
-                props.show ? styles.callout : styles.hidden,
+                styles.callout,
                 {
                     height: calloutHeight
                 }
             ]}
         >
-            <Text style={styles.title}>{'\n' + props.title}</Text>
-            <IconButton color="#ea3535" style={styles.icon} size={50} icon='bookmark-plus'></IconButton>
-
+            <Text style={styles.title}>{'\n' + props.marker.title}</Text>
+            <IconButton
+                color="#ea3535"
+                style={styles.icon}
+                size={50}
+                icon='bookmark-plus'
+                onPress={bookmarkLocation}
+            />
         </Animated.View>
     );
 }
@@ -42,14 +51,11 @@ const styles = StyleSheet.create({
     callout: {
         position: 'absolute',
         backgroundColor: 'white',
-        bottom: 0,
-        height: 150,
+        bottom: 15,
+        height: 0,
         width: Dimensions.get('window').width - 30,
         alignSelf: "center",
         borderRadius: 8,
-    },
-    hidden: {
-        height: 0
     },
     title: {
         textAlign: "center",
