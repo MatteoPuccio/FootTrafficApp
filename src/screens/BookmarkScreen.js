@@ -5,7 +5,6 @@ import { ActivityIndicator } from "react-native-paper";
 import Bookmark from '../components/Bookmark.js';
 import { fetchBookmarks } from "../api/bookmarks.js";
 import { useTranslation } from "react-i18next";
-import { bookmarks } from "../api/bookmarks.js";
 
 export default function BookmarkScreen(props) {
 
