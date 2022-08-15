@@ -34,12 +34,10 @@ export default function MapScreen(props) {
     useEffect(() => {
         const _setUserLocation = async () => {
             const _location = await getCurrentLocation();
-            console.log("Waiting for _location " + _location);
             setUserLocation(_location);
         }
 
         _setUserLocation();
-        console.log("UseEffect: " + JSON.stringify(userLocation));
     }, []);
 
     const displayMap = (_data, _location) => {
@@ -50,7 +48,6 @@ export default function MapScreen(props) {
             latitudeDelta: latitudeDelta,
             longitudeDelta: longitudeDelta
         });
-        console.log('Showing map...');
         console.log(_data);
         _data.geometry = {
             location: _location
@@ -63,9 +60,7 @@ export default function MapScreen(props) {
         setShowPopup(!showPopup);
     }
 
-    if (userLocation == null) {
-        getCurrentLocation();
-        //console.log(location);
+    if (userLocation == null && !userLocation.acquired) {
         return (
             <View style={{ justifyContent: "center", flex: 1 }}>
                 <ActivityIndicator size="large" />
@@ -100,7 +95,9 @@ export default function MapScreen(props) {
                     key='markerPopup'
                     marker={selectedMarker}
                     show={showPopup}
-                    bookmarkLocation={props.bookmarkLocation}
+                    setShow={setShowMap}
+                    setBookmarks={props.setBookmarks}
+                    getBookmarks={props.getBookmarks}
                 />
                 ]
                 : <GooglePlacesInput

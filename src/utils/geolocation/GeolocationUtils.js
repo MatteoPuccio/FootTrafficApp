@@ -3,10 +3,10 @@ import { PermissionsAndroid } from "react-native";
 
 
 
-export let grantedPermission = false;
+export var grantedPermission = false;
 export function setGrantedPermission(granted) { grantedPermission = granted; }
 
-export let location = {
+export var location = {
     acquired: false,
     latLng: "0,0"
 }

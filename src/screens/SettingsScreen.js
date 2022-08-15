@@ -1,10 +1,19 @@
 import React from "react";
-import { View, Text } from "react-native"
+import { View, StyleSheet } from "react-native"
+import Selector from "../components/LanguageSelector";
 
 export default function SettingsScreen() {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Settings Screen</Text>
+        <View style={styles.container}>
+            <Selector />
+
         </View>
     );
 }
+
+
+const styles = StyleSheet.create({
+    container: {
+
+    }
+});

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,6 +8,8 @@ import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import MapScreen from "../screens/MapScreen";
 import BookmarkScreen from '../screens/BookmarkScreen';
+import SignInScreen from '../screens/SignInScreen';
+import { bookmarks, fetchBookmarks } from '../api/bookmarks';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -31,13 +33,16 @@ class TabIcon extends React.Component {
 
 
 
-export default function BottomNavigation() {
+export default function BottomNavigation(props) {
 
-    const [bookmarks, setBookmarks] = useState([]);
+    const [bookmarks, setBookmarks] = useState(null);
 
-    const bookmarkLocation = () => {
+    useEffect(() => {
+        fetchBookmarks(setBookmarks);
+    }, []);
 
-    }
+    //function to pass to children to get updated non-static props
+    const getBookmarks = () => { return bookmarks; };
 
     return (
 
@@ -60,7 +65,7 @@ export default function BottomNavigation() {
                 />
                 <Tab.Screen
                     name="map"
-                    children={() => <MapScreen bookmarkLocation={bookmarkLocation} />}
+                    children={() => <MapScreen getBookmarks={getBookmarks} setBookmarks={setBookmarks} />}
 
                     options={{
                         tabBarLabel: 'Map',
@@ -72,7 +77,13 @@ export default function BottomNavigation() {
                 />
                 <Tab.Screen
                     name="bookmarks"
-                    children={() => <BookmarkScreen bookmarks={bookmarks} />}
+                    children={() =>
+                        <BookmarkScreen
+                            getBookmarks={getBookmarks}
+                            setBookmarks={setBookmarks}
+                            accessToken={props.accessToken}
+                        />
+                    }
                     options={{
                         tabBarLabel: 'Map',
                         tabBarIcon: ({ focused, color }) => (

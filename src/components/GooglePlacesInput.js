@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
 import { location } from '../utils/geolocation/GeolocationUtils';
-
+import { useTranslation } from 'react-i18next';
 
 
 navigator.geolocation = require('react-native-geolocation-service');
@@ -20,9 +20,11 @@ function geocoderQuery(data, displayMapFunc) {
 }
 
 const GooglePlacesInput = (props) => {
+    const { t } = useTranslation();
+
     return (
         <GooglePlacesAutocomplete
-            placeholder='Search'
+            placeholder={t('common:googlePlaceInputSearchPlaceholder')}
             onPress={(data, details = null) => {
                 // on press, show map
                 console.log(JSON.stringify(data));
@@ -46,7 +48,7 @@ const GooglePlacesInput = (props) => {
                 radius: 1000
             }}
             currentLocation={true}
-            currentLocationLabel='Vicino a te'
+            currentLocationLabel={t('common:currentLocationLabel')}
             enablePoweredByContainer={false}
         />
     );
