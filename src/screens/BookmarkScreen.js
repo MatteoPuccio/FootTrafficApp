@@ -46,6 +46,5 @@ const styles = StyleSheet.create({
     bookmarkContainer:
     {
         marginVertical: 15,
-        backgroundColor: 'white'
     }
 });

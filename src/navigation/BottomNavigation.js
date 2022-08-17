@@ -10,6 +10,7 @@ import MapScreen from "../screens/MapScreen";
 import BookmarkScreen from '../screens/BookmarkScreen';
 import SignInScreen from '../screens/SignInScreen';
 import { bookmarks, fetchBookmarks } from '../api/bookmarks';
+import color from '../constants/color';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -110,6 +111,6 @@ export default function BottomNavigation(props) {
 
 const styles = StyleSheet.create({
     barStyle: {
-        backgroundColor: '#2319e0',
+        backgroundColor: color.mainColor,
     }
 });
