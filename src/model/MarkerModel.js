@@ -6,7 +6,8 @@ export default class MarkerModel {
         data = data == null ? {
             geometry: { location: { lat: 0, lng: 0 } },
             name: "Nessun luogo selezionato",
-            types: "Seleziona un luogo con la barra di ricerca"
+            types: "Seleziona un luogo con la barra di ricerca",
+            address: null,
         } : data;
 
         this.coordinate = {
@@ -15,5 +16,6 @@ export default class MarkerModel {
         };
         this.title = data.name != null ? data.name : data.description.split(',')[0];
         this.description = JSON.stringify(data.types);
+        this.address = data.address;
     }
 }

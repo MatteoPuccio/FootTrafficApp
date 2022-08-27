@@ -2,17 +2,14 @@ import { deleteItemEncrypted, storeItemEncrypted } from "../utils/common";
 
 export var accessToken;
 
-export const doLogin = async () => {
+export const doLogin = async (credentials) => {
     fetch('http://10.0.2.2:8080/doLogin', {
         method: 'POST',
         headers: {
             Accept: 'text/plain',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            'email': 'gladian.matteo@gmail.com',
-            'password': 'matteo'
-        })
+        body: JSON.stringify(credentials)
     })
         .then((response) => response.json())
         .then((json) => {

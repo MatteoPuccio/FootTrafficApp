@@ -1,6 +1,6 @@
 
 export default {
-    googlePlaceInputSearchPlaceholder: 'Cerca...',
+    googlePlaceInputSearchPlaceholder: 'Cerca indirizzo...',
     currentLocationLabel: 'Vicino a te',
     zeroBookmarksLabel: 'Nessun luogo salvato ancora...\nAggiungine uno!'
 }

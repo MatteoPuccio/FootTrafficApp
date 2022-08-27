@@ -20,6 +20,7 @@ export async function deleteItemEncrypted(key) {
     }
 }
 
+
 export async function getItemEncrypted(key) {
     try {
         item = await EncryptedStorage.getItem(key);
@@ -27,4 +28,19 @@ export async function getItemEncrypted(key) {
     } catch (error) {
         console.log(error);
     }
+}
+
+export const closestInArray = (arr, element) => {
+    return arr.reduce((prev, curr) => {
+        return (Math.abs(element - curr) < Math.abs(element - prev) ? curr : prev);
+    })
+};
+
+export const indexMaxInArray = (arr) => {
+    console.log(arr);
+    return arr.indexOf(Math.max.apply(null, arr));
+}
+
+export const indexMinInArray = (arr) => {
+    return arr.indexOf(Math.min.apply(null, arr));
 }

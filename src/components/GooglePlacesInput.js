@@ -1,20 +1,24 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
-import { location } from '../utils/geolocation/GeolocationUtils';
+import { location, reverseGeocoding } from '../utils/geolocation/GeolocationUtils';
 import { useTranslation } from 'react-i18next';
-
+import { googleApiKey } from '../utils/geolocation/GeolocationUtils'
 
 navigator.geolocation = require('react-native-geolocation-service');
 
-Geocoder.init('AIzaSyATzcYuSDLgX6sMUW42esjsy94sJpxRmF4', { language: 'it' });
+Geocoder.init(googleApiKey, { language: 'it' });
 
 function geocoderQuery(data, displayMapFunc) {
+    console.log(data);
     Geocoder.from(data.description)
         .then(json => {
+
             var location = json.results[0].geometry.location;
-            console.log(location);
-            displayMapFunc(data, location);
+            if (data.vicinity == undefined)
+                reverseGeocoding(data, location, displayMapFunc);
+            else
+                displayMapFunc(data, location, data.vicinity);
         })
         .catch(error => console.warn(error));
 }
@@ -26,14 +30,12 @@ const GooglePlacesInput = (props) => {
         <GooglePlacesAutocomplete
             placeholder={t('common:googlePlaceInputSearchPlaceholder')}
             onPress={(data, details = null) => {
-                // on press, show map
                 console.log(JSON.stringify(data));
-
                 if (data.geometry == undefined) {
                     //geocoder query for places without address
                     geocoderQuery(data, props.displayMap);
                 } else {
-                    props.displayMap(data, data.geometry.location);
+                    props.displayMap(data, data.geometry.location, data.vicinity);
                 }
 
             }}
@@ -41,7 +43,7 @@ const GooglePlacesInput = (props) => {
             onTimeout={(e) => console.log(e)}
             query={{
                 location: location.latLng,
-                key: 'AIzaSyATzcYuSDLgX6sMUW42esjsy94sJpxRmF4',
+                key: googleApiKey,
                 language: 'it',
                 type: 'establishment',
                 rankby: 'distance',

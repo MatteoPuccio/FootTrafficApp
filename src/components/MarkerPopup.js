@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, View, StyleSheet, Text, Dimensions } from "react-native";
+import { Animated, StyleSheet, Text, Dimensions } from "react-native";
 import { IconButton } from "react-native-paper";
 import { addBookmark } from "../api/bookmarks";
 
@@ -27,11 +27,13 @@ export default function MarkerPopup(props) {
         let bookmark = {
             'name': props.marker.title,
             'latitude': props.marker.coordinate.latitude,
-            'longitude': props.marker.coordinate.longitude
+            'longitude': props.marker.coordinate.longitude,
+            'address': props.marker.address,
         };
+        console.log(bookmark);
         addBookmark(bookmark, props.setBookmarks);
 
-        //props.setShow(false);
+        props.setShow(false);
     }
 
     return (

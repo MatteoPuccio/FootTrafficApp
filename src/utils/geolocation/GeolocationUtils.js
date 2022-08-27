@@ -6,12 +6,12 @@ import { PermissionsAndroid } from "react-native";
 export var grantedPermission = false;
 export function setGrantedPermission(granted) { grantedPermission = granted; }
 
+export const googleApiKey = 'AIzaSyATzcYuSDLgX6sMUW42esjsy94sJpxRmF4';
+
 export var location = {
     acquired: false,
     latLng: "0,0"
 }
-
-
 
 //get user permission to use location
 export const getLocationPermission = async () => {
@@ -64,4 +64,16 @@ const _getCurrentLocation = async () => {
 export const getCurrentLocation = async () => {
     await _getCurrentLocation();
     return location;
+}
+
+export const reverseGeocoding = async (data, latLng, displayMap) => {
+    fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='
+        + latLng.lat + ',' + latLng.lng + '&key=' + googleApiKey, {
+        method: 'GET',
+    })
+        .then((json) => json.json())
+        .then((json) => {
+            console.log(JSON.stringify(json));
+            displayMap(data, latLng, json.plus_code.compound_code);
+        });
 }

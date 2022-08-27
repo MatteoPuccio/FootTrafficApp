@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View, StyleSheet, Text, TouchableHighlight, Dimensions, Button } from "react-native";
 import { TextInput } from "react-native-paper";
@@ -7,10 +7,16 @@ import { doLogin, forgotPassword } from "../api/login";
 
 export default function SignInScreen(props) {
 
+    const [emailFieldText, setEmailFieldText] = useState(null);
+    const [passwordText, setPasswordText] = useState(null);
+
     const { t } = useTranslation();
 
     const login = async () => {
-        props.setAccessToken(doLogin());
+        props.setAccessToken(doLogin({
+            'email': emailFieldText,
+            'password': passwordText,
+        }));
     }
 
     return (
@@ -20,8 +26,17 @@ export default function SignInScreen(props) {
                 <Text style={styles.signInText}>{t('loginForm:signIn')}</Text>
                 <Text style={styles.signInSubText}>to use the app</Text>
             </View>
-            <TextInput style={styles.textInput} placeholder={t('loginForm:placeholderEmail')}></TextInput>
-            <TextInput style={styles.textInput} placeholder={t('loginForm:placeholderPassword')}></TextInput>
+            <TextInput
+                style={styles.textInput}
+                placeholder={t('loginForm:placeholderEmail')}
+                onChangeText={newText => setEmailFieldText(newText)}
+            />
+            <TextInput
+                style={styles.textInput}
+                placeholder={t('loginForm:placeholderPassword')}
+                onChangeText={newText => setPasswordText(newText)}
+                secureTextEntry={true}
+            />
             <View style={styles.buttonsContainer}>
                 <TouchableHighlight underlayColor='#ececec' onPress={forgotPassword} style={styles.forgotPassword}>
                     <Text style={styles.forgotPassword}>{t('loginForm:forgotPassword')}</Text>

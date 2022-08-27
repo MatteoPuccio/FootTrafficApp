@@ -40,18 +40,19 @@ export default function MapScreen(props) {
         _setUserLocation();
     }, []);
 
-    const displayMap = (_data, _location) => {
+    const displayMap = (_data, _location, address) => {
         console.log(JSON.stringify(_data) + " " + JSON.stringify(_location));
         setCoords({
             latitude: _location.lat,
             longitude: _location.lng,
             latitudeDelta: latitudeDelta,
-            longitudeDelta: longitudeDelta
+            longitudeDelta: longitudeDelta,
         });
         console.log(_data);
         _data.geometry = {
-            location: _location
+            location: _location,
         };
+        _data.address = address;
         setSelectedMarker(new MarkerModel(_data));
         setShowMap(true);
     }
@@ -124,6 +125,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     exitMapButton: {
-        //backgroundColor: '#cacbd5'
+        backgroundColor: 'white',
+        borderColor: 'rgba(0,0,0,0.3)',
+        borderWidth: 1,
+        elevation: 5,
     },
 });

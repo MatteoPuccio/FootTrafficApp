@@ -11,7 +11,7 @@ import BookmarkScreen from '../screens/BookmarkScreen';
 import SignInScreen from '../screens/SignInScreen';
 import { bookmarks, fetchBookmarks } from '../api/bookmarks';
 import color from '../constants/color';
-
+import { BookmarkStack } from './BookmarkStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -79,7 +79,7 @@ export default function BottomNavigation(props) {
                 <Tab.Screen
                     name="bookmarks"
                     children={() =>
-                        <BookmarkScreen
+                        <BookmarkStack
                             getBookmarks={getBookmarks}
                             setBookmarks={setBookmarks}
                             accessToken={props.accessToken}
