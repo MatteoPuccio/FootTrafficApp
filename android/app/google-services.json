@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1090731852248",
+    "project_id": "busynessapp-5186d",
+    "storage_bucket": "busynessapp-5186d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090731852248:android:dc64a73ce6ac9c2a3332ad",
+        "android_client_info": {
+          "package_name": "com.scriptsmsteams"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090731852248-gmn7fviho76u80kgii5aqeahsho17krq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scriptsmsteams",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1090731852248-1k45dcloahjg0iia2ot85s1a62m3dj31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVJfDVV6s18zxIa4uE3wVpf1cB1mAQodA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090731852248-1k45dcloahjg0iia2ot85s1a62m3dj31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
