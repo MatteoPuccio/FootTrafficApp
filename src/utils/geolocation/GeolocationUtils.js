@@ -6,7 +6,7 @@ import { PermissionsAndroid } from "react-native";
 export var grantedPermission = false;
 export function setGrantedPermission(granted) { grantedPermission = granted; }
 
-export const googleApiKey = 'AIzaSyATzcYuSDLgX6sMUW42esjsy94sJpxRmF4';
+export const googleApiKey = '###############';
 
 var location = {
     acquired: false,
