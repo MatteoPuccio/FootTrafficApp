@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geocoder from 'react-native-geocoding';
-import { location, reverseGeocoding } from '../utils/geolocation/GeolocationUtils';
+import { getCurrentLocation, reverseGeocoding } from '../utils/geolocation/GeolocationUtils';
 import { useTranslation } from 'react-i18next';
 import { googleApiKey } from '../utils/geolocation/GeolocationUtils'
 
@@ -23,8 +23,20 @@ function geocoderQuery(data, displayMapFunc) {
         .catch(error => console.warn(error));
 }
 
+
+
 const GooglePlacesInput = (props) => {
     const { t } = useTranslation();
+
+    const [location, setLocation] = useState({ latLng: "0,0" })
+
+    const setLocationState = async () => {
+        setLocation(await getCurrentLocation());
+    }
+
+    useEffect(() => {
+        setLocationState();
+    }, [])
 
     return (
         <GooglePlacesAutocomplete

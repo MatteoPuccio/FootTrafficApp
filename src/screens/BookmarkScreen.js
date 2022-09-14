@@ -6,9 +6,21 @@ import { useNavigation } from "@react-navigation/native";
 
 import { updateBusyChart } from '../components/BusyTimeBarChart'
 import Bookmark from '../components/Bookmark.js';
+import { ScrollView } from "react-native-gesture-handler";
 
 
 export default function BookmarkScreen(props) {
+
+    const [prevState, setPrevState] = useState(null);
+
+    useEffect(() => {
+        //force rerender if prev bookmarks are different
+        let bookmarks = props.getBookmarks();
+
+        if (bookmarks != prevState) {
+            setPrevState(bookmarks);
+        }
+    }, [props.getBookmarks()])
 
     const navigation = useNavigation();
 
@@ -45,24 +57,15 @@ export default function BookmarkScreen(props) {
     }
 
     return (
-        <View style={styles.bookmarkContainer}>
-            {props.getBookmarks().map((bookmark) => {
-                return (
-                    <Bookmark
-                        key={bookmark.id}
-                        bookmark={bookmark}
-                        deleteBookmark={deleteBookmark}
-                        viewBookmarkDetails={viewBookmarkDetails}
-                    />
-                );
-            })}
-        </View >
+        <ScrollView>
+            {props.getBookmarks().map((bookmark) =>
+                <Bookmark
+                    key={bookmark.id + bookmark.name}
+                    bookmark={bookmark}
+                    deleteBookmark={deleteBookmark}
+                    viewBookmarkDetails={viewBookmarkDetails}
+                />
+            )}
+        </ScrollView >
     );
 }
-
-const styles = StyleSheet.create({
-    bookmarkContainer:
-    {
-        marginVertical: 15,
-    }
-});

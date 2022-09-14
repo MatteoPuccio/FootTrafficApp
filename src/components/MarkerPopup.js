@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, Dimensions } from "react-native";
 import { IconButton } from "react-native-paper";
 import { addBookmark } from "../api/bookmarks";
+import color from "../constants/color";
 
 export default function MarkerPopup(props) {
 
@@ -45,11 +46,11 @@ export default function MarkerPopup(props) {
                 }
             ]}
         >
-            <Text style={styles.title}>{'\n' + props.marker.title}</Text>
+            <Text style={styles.title}>{'\n' + (props.marker.title).toUpperCase()}</Text>
             <IconButton
-                color="#ea3535"
+                color="white"
                 style={styles.icon}
-                size={50}
+                size={40}
                 icon='bookmark-plus'
                 onPress={bookmarkLocation}
             />
@@ -66,11 +67,22 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 30,
         alignSelf: "center",
         borderRadius: 8,
+        borderTopWidth: 0.5,
+        borderRightWidth: 0.5,
+        borderLeftWidth: 0.5,
+        borderColor: 'rgba(0,0,0,0.1)'
     },
     title: {
         textAlign: "center",
-        fontSize: 24
-    }, icon: {
+        fontSize: 24,
+        color: 'black',
+        fontWeight: "500"
+    },
+    icon: {
         alignSelf: "center",
+        borderWidth: 0.5,
+        borderColor: 'rgba(0,0,0,0.2)',
+        elevation: 3,
+        backgroundColor: '#ea3535'
     }
 });

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { ActivityIndicator } from "react-native-paper";
+import { Button } from "react-native-paper";
 
 import { BusyTimeBarChart } from "../components/BusyTimeBarChart";
-import { getBookmarkBusyness } from "../api/bookmarks";
+import { doRemoveBookmark, getBookmarkBusyness, getBookmarkInfo } from "../api/bookmarks";
 import { indexMaxInArray, indexMinInArray } from "../utils/common";
 import color from "../constants/color";
 
@@ -21,14 +21,17 @@ export default function BookmarkDetailsScreen(props) {
 
     const [selectedTime, setSelectedTime] = useState(0);
     const [busyTimes, setBusyTimes] = useState([]);
+    const [bookmarkInfo, setBookmarkInfo] = useState({});
 
     useEffect(() => {
         getBookmarkBusyness(props.bookmark, setBusyTimes);
+        getBookmarkInfo(props.bookmark, setBookmarkInfo);
     }, []);
 
     useEffect(() => {
         navigation.setOptions({ headerTitle: props.bookmark.name });
         getBookmarkBusyness(props.bookmark, setBusyTimes);
+        getBookmarkInfo(props.bookmark, setBookmarkInfo);
     }, [props.bookmark]);
 
     const getBusyTimes = () => {
@@ -40,10 +43,34 @@ export default function BookmarkDetailsScreen(props) {
 
 
     const getSelectedBusyness = () => {
-        //return string indicating busyness
-        return busyTimes[selectedTime] > 70 ? 'veryBusyLabel'
-            : busyTimes[selectedTime] > 40 ? 'kindaBusyLabel'
+        let day = new Date().getDay();
+        let currentBusyTimes = busyTimes[day][day];
+        return currentBusyTimes[selectedTime] > 65 ? 'veryBusyLabel'
+            : currentBusyTimes[selectedTime] > 35 ? 'kindaBusyLabel'
                 : 'notBusyLabel';
+    }
+
+    const deleteBookmark = () => {
+        navigation.navigate("BookmarkScreen");
+        doRemoveBookmark(props.bookmark, props.setBookmarks);
+    }
+
+    const deleteBookmarkPrompt = () => {
+        Alert.alert(
+            t('bookmarkDetails:deleteBookmarkPrompt'),
+            '',
+            [
+                {
+                    text: t('common:cancel'),
+                    style: "cancel"
+                },
+                { text: t('common:okay'), onPress: deleteBookmark }
+            ]
+        );
+    }
+
+    const setAlarmScreen = () => {
+        navigation.navigate("SetReminderScreen");
     }
 
     return (
@@ -57,7 +84,7 @@ export default function BookmarkDetailsScreen(props) {
                         <Text style={{ fontSize: 13 }}>{selectedTime + ':00: ' + t('bookmarkDetails:' + getSelectedBusyness())}</Text>
                     </View>
                     <View style={styles.infoContainer}>
-                        <Icon name="alarm" size={25} style={{ marginRight: 15 }}></Icon>
+                        <Icon name="clock" size={25} style={{ marginRight: 15 }}></Icon>
                         <Text style={{ fontSize: 18 }}>
                             {t('bookmarkDetails:maxTimeLabel') + indexMaxInArray(getBusyTimes()) + ':00'}
                         </Text>
@@ -68,12 +95,50 @@ export default function BookmarkDetailsScreen(props) {
                             {t('bookmarkDetails:minTimeLabel') + indexMinInArray(getBusyTimes()) + ':00'}
                         </Text>
                     </View>
+                    {
+                        bookmarkInfo != null &&
+                        <View style={styles.infoContainer}>
+                            <Icon name="walk" size={25} style={{ marginRight: 15 }}></Icon>
+                            <Text style={{ fontSize: 18 }}>
+                                {
+                                    t('bookmarkDetails:avgDwellTimeLabel') +
+                                    Math.floor(bookmarkInfo.avgDwellTime % 60) + ' ' + t('common:minutes')
+                                }
+                            </Text>
+                        </View>
+                    }
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            mode="contained"
+                            onPress={deleteBookmarkPrompt}
+                            color={color.dangerousAction}
+                            dark={true}
+                        >{t('bookmarkDetails:deleteLabel')}
+                        </Button>
+                        <Button
+                            mode="contained"
+                            style={styles.setAlarmButton}
+                            onPress={setAlarmScreen}
+                        >{t('bookmarkDetails:setAlarmLabel')}
+                        </Button>
+                    </View>
                 </View >
-                : <View>
+                :
+                <View>
                     <Text style={styles.chartLabel}>{t('bookmarkDetails:busynessChartLabel')}</Text>
                     <Text style={styles.noDataLabel}>{t('bookmarkDetails:noAvailableData')}</Text>
+                    <View style={[styles.buttonContainer, { marginTop: 220, justifyContent: 'center' }]}>
+                        <Button
+                            mode="contained"
+                            onPress={deleteBookmarkPrompt}
+                            color={color.dangerousAction}
+                            dark={true}
+                        >{t('bookmarkDetails:deleteLabel')}
+                        </Button>
+                    </View>
                 </View>
             }
+
         </View >
     );
 }
@@ -104,10 +169,17 @@ const styles = StyleSheet.create({
         marginTop: 30,
         fontSize: 18,
         textAlign: 'center',
-        fontStyle: 'italic'
+        fontWeight: "600",
+        fontStyle: 'italic',
+        color: 'black'
     },
     infoContainer: {
         flexDirection: "row",
         marginVertical: 10
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 80,
     }
 });

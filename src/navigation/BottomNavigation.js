@@ -2,16 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationContainer } from '@react-navigation/native';
 
-import HomeScreen from "../screens/HomeScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 import MapScreen from "../screens/MapScreen";
-import BookmarkScreen from '../screens/BookmarkScreen';
-import SignInScreen from '../screens/SignInScreen';
-import { bookmarks, fetchBookmarks } from '../api/bookmarks';
+import { fetchBookmarks } from '../api/bookmarks';
 import color from '../constants/color';
 import { BookmarkStack } from './BookmarkStack';
+import { SettingsStack } from './SettingsStack';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -47,64 +43,55 @@ export default function BottomNavigation(props) {
 
     return (
 
-        <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName="home"
-                barStyle={styles.barStyle}
-                labeled={false}
-            >
-                <Tab.Screen
-                    name="home"
-                    component={HomeScreen}
+        <Tab.Navigator
+            initialRouteName="bookmarks"
+            barStyle={styles.barStyle}
+            labeled={false}
+        >
+            <Tab.Screen
+                name="map"
+                children={() =>
+                    <MapScreen
+                        getBookmarks={getBookmarks}
+                        setBookmarks={setBookmarks}
+                    />}
 
-                    options={{
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({ focused, color }) => (
-                            <TabIcon name="home" color={color} focused={focused} />
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name="map"
-                    children={() => <MapScreen getBookmarks={getBookmarks} setBookmarks={setBookmarks} />}
+                options={{
+                    tabBarLabel: 'Map',
+                    tabBarIcon: ({ focused, color }) => (
+                        <TabIcon name="google-maps" color={color} focused={focused} />
+                    ),
+                }}
 
-                    options={{
-                        tabBarLabel: 'Map',
-                        tabBarIcon: ({ focused, color }) => (
-                            <TabIcon name="google-maps" color={color} focused={focused} />
-                        ),
-                    }}
+            />
+            <Tab.Screen
+                name="bookmarks"
+                children={() =>
+                    <BookmarkStack
+                        getBookmarks={getBookmarks}
+                        setBookmarks={setBookmarks}
+                        bookmarks={bookmarks}
+                    />
+                }
+                options={{
+                    tabBarLabel: 'Map',
+                    tabBarIcon: ({ focused, color }) => (
+                        <TabIcon name="bookmark" color={color} focused={focused} />
+                    ),
+                }}
 
-                />
-                <Tab.Screen
-                    name="bookmarks"
-                    children={() =>
-                        <BookmarkStack
-                            getBookmarks={getBookmarks}
-                            setBookmarks={setBookmarks}
-                            accessToken={props.accessToken}
-                        />
-                    }
-                    options={{
-                        tabBarLabel: 'Map',
-                        tabBarIcon: ({ focused, color }) => (
-                            <TabIcon name="bookmark" color={color} focused={focused} />
-                        ),
-                    }}
-
-                />
-                <Tab.Screen
-                    name="settings"
-                    component={SettingsScreen}
-                    options={{
-                        tabBarLabel: 'Settings',
-                        tabBarIcon: ({ focused, color }) => (
-                            <TabIcon name="cog" color={color} focused={focused} />
-                        ),
-                    }}
-                />
-            </Tab.Navigator>
-        </NavigationContainer>
+            />
+            <Tab.Screen
+                name="settings"
+                component={SettingsStack}
+                options={{
+                    tabBarLabel: 'Settings',
+                    tabBarIcon: ({ focused, color }) => (
+                        <TabIcon name="cog" color={color} focused={focused} />
+                    ),
+                }}
+            />
+        </Tab.Navigator>
     );
 }
 

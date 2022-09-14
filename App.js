@@ -1,43 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+
 import BottomNavigation from './src/navigation/BottomNavigation';
 import './src/constants/translations/IMLocalize';
-import SignInScreen from './src/screens/SignInScreen';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import { doLogin, doLoginToken } from './src/api/login';
-import { getItemEncrypted } from './src/utils/common';
-import { ActivityIndicator } from 'react-native-paper';
-
+import { NavigationContainer } from '@react-navigation/native';
+import AuthenticationStack from './src/navigation/AuthenticationStack';
 
 function App() {
 
-  const [accessToken, setAccessToken] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const tryLoginUsingToken = async () => {
-      let token = await getItemEncrypted('@access_token');
-      console.log("Token: " + JSON.stringify(token));
-      if (token != null) {
-        doLoginToken(token, setAccessToken);
-      }
-      setLoading(false);
-    }
-
-    tryLoginUsingToken();
-  }, []);
+  const MainStack = createNativeStackNavigator();
 
 
-  if (loading)
-    return (<ActivityIndicator size='large' style={{ alignSelf: 'center' }} />);
 
-  if (accessToken == null) {
-    console.log("access token: " + accessToken);
-    return (
-      <SignInScreen setAccessToken={setAccessToken} />
-    )
-  }
   return (
-    <BottomNavigation accessToken={accessToken} />
+    <NavigationContainer>
+      <MainStack.Navigator initialRouteName='AuthenticationStack'>
+        <MainStack.Screen name='AuthenticationStack'
+          options={{ headerShown: false }}
+          children={() =>
+            <AuthenticationStack />}
+        />
+
+        <MainStack.Screen name='BottomNavigation'
+          options={{ headerShown: false }}
+          children={() =>
+            <BottomNavigation />}
+        />
+
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 
 };

@@ -13,6 +13,7 @@ export default function Bookmark(props) {
             <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 paddingHorizontal: 10,
             }}>
                 <Text style={styles.name}>{props.bookmark.name}</Text>
@@ -31,6 +32,7 @@ export default function Bookmark(props) {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 20,
+        marginTop: 15,
         backgroundColor: 'white',
         marginBottom: 15,
         marginHorizontal: 10,
@@ -45,10 +47,13 @@ const styles = StyleSheet.create({
         left: 280,
         top: -2,
         transform: [{ scaleY: 1.4 }],
+        zIndex: 1
     },
     name: {
         fontSize: 20,
-        color: 'black'
+        color: 'black',
+        fontWeight: '700',
+        marginRight: 100,
     },
 });
 

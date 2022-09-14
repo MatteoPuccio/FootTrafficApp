@@ -37,10 +37,19 @@ export const closestInArray = (arr, element) => {
 };
 
 export const indexMaxInArray = (arr) => {
-    console.log(arr);
     return arr.indexOf(Math.max.apply(null, arr));
 }
 
 export const indexMinInArray = (arr) => {
     return arr.indexOf(Math.min.apply(null, arr));
 }
+
+export const validateEmail = (email) => {
+    splitEmail = email.split('@');
+    if (splitEmail.length <= 1)
+        return false;
+    if (!splitEmail[1].includes('\.'))
+        return false;
+    return true;
+}
+

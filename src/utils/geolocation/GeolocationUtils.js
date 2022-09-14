@@ -8,7 +8,7 @@ export function setGrantedPermission(granted) { grantedPermission = granted; }
 
 export const googleApiKey = 'AIzaSyATzcYuSDLgX6sMUW42esjsy94sJpxRmF4';
 
-export var location = {
+var location = {
     acquired: false,
     latLng: "0,0"
 }
@@ -20,8 +20,8 @@ export const getLocationPermission = async () => {
         const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
-                'title': 'Busy Place App',
-                'message': 'Busy Place App access to your location '
+                'title': 'Crowding Tracker App',
+                'message': 'Crowing Tracker wants access to your location'
             }
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -48,12 +48,12 @@ const _getCurrentLocation = async () => {
             maximumAge: 0
         };
 
-        navigator.geolocation.default.getCurrentPosition(
+        await navigator.geolocation.default.getCurrentPosition(
             (position) => {
                 location.latLng = JSON.stringify(position.coords.latitude) + ',' + JSON.stringify(position.coords.longitude);
                 location.acquired = true;
                 console.log(location);
-                //console.log(JSON.stringify(location));
+                console.log(JSON.stringify(location));
             },
             (error) => { console.error(error.message) },
             options

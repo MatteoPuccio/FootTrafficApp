@@ -61,7 +61,7 @@ export default function MapScreen(props) {
         setShowPopup(!showPopup);
     }
 
-    if (userLocation == null && !userLocation.acquired) {
+    if (userLocation == null) {
         return (
             <View style={{ justifyContent: "center", flex: 1 }}>
                 <ActivityIndicator size="large" />

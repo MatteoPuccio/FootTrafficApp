@@ -6,5 +6,9 @@ export default {
     notBusyLabel: 'Solitamente non affollato',
     kindaBusyLabel: 'Solitamente un po\' affollato',
     veryBusyLabel: 'Solitamente molto affollato',
-    noAvailableData: 'Nessuna Informazione'
+    noAvailableData: 'Nessuna Informazione',
+    deleteLabel: 'Elimina',
+    setAlarmLabel: 'Promemoria',
+    avgDwellTimeLabel: 'Sosta media: ',
+    deleteBookmarkPrompt: 'Rimuovi Luogo Salvato?',
 }

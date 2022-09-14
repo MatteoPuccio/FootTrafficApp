@@ -4,21 +4,27 @@ import React, { useEffect, useState } from "react";
 
 import BookmarkScreen from "../screens/BookmarkScreen";
 import BookmarkDetailsScreen from "../screens/BookmarkDetailsScreen";
+import SetReminderScreen from "../screens/SetReminderScreen";
+import color from "../constants/color";
+import { useTranslation } from "react-i18next";
 
 
 const Stack = createNativeStackNavigator();
 
 export function BookmarkStack(props) {
 
+    const { t } = useTranslation();
+
     const [bookmarkDetailsElement, setBookmarkDetailsElement] = useState(null);
 
     return (
         <Stack.Navigator initialRouteName="BookmarkScreen">
             <Stack.Screen name="BookmarkScreen"
-                options={
-                    {
-                        headerShown: false,
-                    }}
+                options={{
+                    headerTintColor: color.mainColor,
+                    headerTitle: t('common:bookmarkScreenLabel'),
+                    headerBackVisible: false,
+                }}
                 children={() =>
                     <BookmarkScreen
                         getBookmarks={props.getBookmarks}
@@ -27,10 +33,25 @@ export function BookmarkStack(props) {
                         setBookmarkDetailsElement={setBookmarkDetailsElement}
                     />}
             />
-            <Stack.Screen name="BookmarkDetailsScreen" children={() =>
-                <BookmarkDetailsScreen
-                    bookmark={bookmarkDetailsElement}
-                />}
+            <Stack.Screen name="BookmarkDetailsScreen"
+                options={{
+                    headerTintColor: color.mainColor
+                }}
+                children={() =>
+                    <BookmarkDetailsScreen
+                        bookmark={bookmarkDetailsElement}
+                        setBookmarks={props.setBookmarks}
+                    />}
+            />
+            <Stack.Screen name="SetReminderScreen"
+                options={{
+                    headerTintColor: color.mainColor
+                }}
+                children={() =>
+                    <SetReminderScreen
+                        bookmark={bookmarkDetailsElement}
+                    />
+                }
             />
         </Stack.Navigator>
     )
